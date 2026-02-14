@@ -1,27 +1,140 @@
-.carousel::-webkit-scrollbar {
-  display: none;
+* {
+  padding: 0px;
+  margin: 0px;
+  box-sizing: border-box;
 }
 
-.carousel-horizontal {
-  animation: carousel_horizontal_animation var(--animationDuration) linear
-    infinite;
-  -webkit-animation: carousel_horizontal_animation var(--animationDuration)
-    linear infinite;
+.verticalSlider {
+  width: var(--width);
+  height: 100%;
+  overflow: hidden;
+  mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    black 20% 80%,
+    transparent
+  );
 }
 
-@keyframes carousel_horizontal_animation {
+.horizontalSlider {
+  width: 100%;
+  height: var(--height);
+  overflow: hidden;
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 20% 80%,
+    transparent
+  );
+}
+
+.horizontalSlider .list,
+.verticalSlider .list {
+  display: flex;
+  position: relative;
+}
+
+.horizontalSlider .list {
+  min-width: calc(var(--width) * var(--quantity));
+}
+
+.verticalSlider .list {
+  flex-direction: column;
+  min-height: calc(var(--height) * var(--quantity));
+}
+
+.horizontalSlider .list .item,
+.verticalSlider .list .item {
+  width: var(--width);
+  height: var(--height);
+  position: absolute;
+  transition: all 0.5s;
+  -webkit-transition: all 0.5s;
+  -moz-transition: all 0.5s;
+  -ms-transition: all 0.5s;
+  -o-transition: all 0.5s;
+}
+
+.horizontalSlider .list .item {
+  left: 100%;
+  animation: horizontalRun 10s linear infinite;
+  -webkit-animation: horizontalRun 10s linear infinite;
+  animation-delay: calc((-10s / var(--quantity)) * var(--position)) !important;
+}
+
+@keyframes horizontalRun {
   from {
-    transform: translateY(0%);
-    -webkit-transform: translateY(0%);
-    -moz-transform: translateY(0%);
-    -ms-transform: translateY(0%);
-    -o-transform: translateY(0%);
+    left: 100%;
   }
   to {
-    transform: translateY(-50%);
-    -webkit-transform: translateY(-50%);
-    -moz-transform: translateY(-50%);
-    -ms-transform: translateY(-50%);
-    -o-transform: translateY(-50%);
+    left: calc(var(--width) * -1);
   }
+}
+
+.horizontalSlider[data-reverse='true'] .list .item {
+  left: calc(var(--width) * -1);
+  animation: horizontalRunReverse 10s linear infinite;
+  -webkit-animation: horizontalRunReverse 10s linear infinite;
+}
+
+@keyframes horizontalRunReverse {
+  from {
+    left: calc(var(--width) * -1);
+  }
+  to {
+    left: 100%;
+  }
+}
+
+.verticalSlider .list .item {
+  top: 100%;
+  animation: verticalRun 10s linear infinite;
+  animation-delay: calc((-10s / var(--quantity)) * var(--position)) !important;
+  -webkit-animation: verticalRun 10s linear infinite;
+}
+
+.verticalSlider[data-reverse='true'] .list .item {
+  top: calc(var(--height) * -1);
+  animation: verticalRunReverse 10s linear infinite;
+  -webkit-animation: verticalRunReverse 10s linear infinite;
+}
+
+@keyframes verticalRun {
+  from {
+    top: 100%;
+  }
+  to {
+    top: calc(var(--height) * -1);
+  }
+}
+
+@keyframes verticalRunReverse {
+  from {
+    top: calc(var(--height) * -1);
+  }
+  to {
+    top: 100%;
+  }
+}
+
+.horizontalSlider .list .item *,
+.verticalSlider .list .item * {
+  width: 100%;
+  height: 100%;
+}
+
+.horizontalSlider:hover .item,
+.verticalSlider:hover .item {
+  animation-play-state: paused !important;
+  filter: grayscale(1);
+  -webkit-filter: grayscale(1);
+  opacity: 0.2;
+}
+
+.horizontalSlider .item:hover,
+.verticalSlider .item:hover {
+  filter: grayscale(0);
+  -webkit-filter: grayscale(0);
+  opacity: 1;
+  cursor: pointer;
 }
